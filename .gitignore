@@ -1,0 +1,18 @@
+# Target and Maven
+target/
+*.class
+
+# IDE and OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+*.log
+
+# Node and Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+.env.local
+.env.*.local
