@@ -72,9 +72,6 @@ export default function TrifectaAgencyMain() {
         {/* Top Header Row */}
         <div className="flex items-center justify-between font-mono text-xs text-slate-800 font-semibold mb-12">
           <div>(t)®</div>
-          <div>
-            Local time: <span className="font-bold">{currentTime || '8월 11, 11:12 오전'}</span>
-          </div>
         </div>
 
         {/* Hero Headline */}

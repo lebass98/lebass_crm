@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Instagram, Globe } from 'lucide-react';
 
 export default function TrifectaAgencySidebar() {
   const navItems = [
@@ -54,14 +54,14 @@ export default function TrifectaAgencySidebar() {
             (t)rifecta®
           </div>
 
-          {/* Bottom: ::: 6-dot Grid Icon */}
-          <div className="grid grid-cols-2 gap-1 p-1 mt-auto">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900" />
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-900" />
+          {/* Bottom: ::: 6-dot Grid Icon matching image */}
+          <div className="grid grid-cols-2 gap-1 p-1 mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />
           </div>
         </div>
 
@@ -106,41 +106,41 @@ export default function TrifectaAgencySidebar() {
 
           </div>
 
-          {/* Bottom Contact & Footer Info Section */}
-          <div className="pt-10 space-y-5 border-t border-slate-100 mt-auto">
+          {/* ---------------------------------------------------- */}
+          {/* BOTTOM CONTACT & FOOTER INFO (100% Image Match)      */}
+          {/* ---------------------------------------------------- */}
+          <div className="pt-8 mt-auto space-y-6 border-t border-slate-100">
             
             {/* Barcode Graphic */}
-            <div className="w-20 h-4 barcode-graphic opacity-80" />
+            <div className="w-24 h-4 barcode-graphic opacity-80 mb-6" />
 
             {/* Phone & Email */}
             <div className="space-y-1">
-              <div className="text-xs text-slate-500 font-mono">(312) 555-2468</div>
+              <div className="text-xs text-slate-500 font-mono mb-1">(312) 555-2468</div>
               <a 
                 href="mailto:hello@trifecta.agency" 
-                className="text-2xl font-extrabold text-slate-950 hover:text-trifecta-red transition-colors block font-outfit tracking-tight"
+                className="text-[26px] sm:text-[28px] font-extrabold text-slate-950 hover:text-trifecta-red transition-colors block font-outfit tracking-tight leading-none mb-6"
               >
                 hello@trifecta.agency
               </a>
             </div>
 
             {/* Copyright */}
-            <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+            <p className="text-[12px] text-slate-400 font-sans leading-relaxed mb-6">
               © 2026 trifecta agency.<br />All rights reserved.
             </p>
 
-            {/* Social Icons & 20©26 Typography */}
-            <div className="flex items-end justify-between pt-2">
-              <div className="flex items-center gap-3 text-base text-slate-800">
-                <a href="#" className="hover:text-trifecta-red transition-colors font-bold font-mono">𝕏</a>
-                <a href="#" className="hover:text-trifecta-red transition-colors">📷</a>
-                <a href="#" className="hover:text-trifecta-red transition-colors">🌐</a>
-              </div>
+            {/* Social Line Icons (X, Instagram, Website) */}
+            <div className="flex items-center gap-4 text-lg text-slate-700 mb-6">
+              <a href="#" className="hover:text-trifecta-red transition-colors font-bold font-mono">𝕏</a>
+              <a href="#" className="hover:text-trifecta-red transition-colors"><Instagram className="w-4 h-4 stroke-[1.75]" /></a>
+              <a href="#" className="hover:text-trifecta-red transition-colors"><Globe className="w-4 h-4 stroke-[1.75]" /></a>
+            </div>
 
-              {/* 20©26 Typography */}
-              <div className="text-right font-outfit font-extrabold text-xs text-slate-900 leading-tight">
-                <div>20©</div>
-                <div>26</div>
-              </div>
+            {/* 20©26 Typography matching image bottom right */}
+            <div className="font-outfit font-extrabold text-xs text-slate-950 leading-tight">
+              <div>20©</div>
+              <div>26</div>
             </div>
 
           </div>
