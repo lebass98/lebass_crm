@@ -2,12 +2,12 @@
 
 @layer base {
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
     background-color: #EAE8E3;
     color: #181818;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Pretendard Variable", Pretendard, 'Outfit', -apple-system, sans-serif;
   }
 }
 
@@ -27,10 +27,14 @@
 
 /* Giant Headline styling */
 .font-giant {
-  font-family: 'Outfit', -apple-system, sans-serif;
+  font-family: "Pretendard Variable", Pretendard, 'Outfit', -apple-system, sans-serif;
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.92;
+}
+
+.font-outfit {
+  font-family: "Pretendard Variable", Pretendard, 'Outfit', sans-serif;
 }
 
 /* Barcode / Stripe Graphic */
