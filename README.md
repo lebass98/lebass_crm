@@ -12,9 +12,10 @@ Tomcat WAS 배포 환경과 Maven 자동화 빌드 파이프라인 위에 **Reac
 - **Embedded Server**: Jetty 10 (`mvn jetty:run`으로 로컬 즉시 구동 지원)
 - **JSON Processing**: Jackson Databind
 
-### Build & Automation
+### Build & Automation & CI/CD
 - **Build Tool**: Apache Maven 3.9+
 - **Frontend Build Automation**: `com.github.eirslett:frontend-maven-plugin` (Maven 패키징 시 Node/npm 설치 및 `npm run build` 자동 트리거)
+- **CI/CD & Hosting**: GitHub Actions (`.github/workflows/deploy.yml`) 기반 GitHub Pages 자동 배포
 - **Packaging**: `org.apache.maven.plugins:maven-war-plugin` (Vite `dist` 정적 자원과 Servlet 클래스를 단일 `.war` 파일로 통합)
 
 ### Frontend
