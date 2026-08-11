@@ -1,323 +1,331 @@
-import React, { useState, useEffect } from 'react';
-import AdminDashboard from './components/AdminDashboard';
+import React, { useState } from 'react';
+import { ThemeProvider, useThemeSystem } from './context/ThemeContext';
+import HeaderBar from './components/HeaderBar';
+import GlassCardGrid from './components/GlassCardGrid';
+import DataGridTable from './components/DataGridTable';
+import MobileSwiper from './components/MobileSwiper';
+import SearchModal from './components/SearchModal';
+import DevicePreviewSimulator from './components/DevicePreviewSimulator';
+import StatusBadge from './components/StatusBadge';
 import { 
-  Server, 
-  Box, 
-  Atom, 
-  Zap, 
-  Palette, 
-  CheckCircle2, 
+  LayoutGrid, 
+  Table, 
+  Filter, 
+  Layers, 
+  SlidersHorizontal, 
   RefreshCw, 
-  Terminal, 
-  Cpu, 
-  ExternalLink,
-  Layers,
-  ArrowRight,
+  Server, 
+  CheckCircle2, 
+  Sparkles,
   Activity,
-  ShieldCheck
+  PlusCircle
 } from 'lucide-react';
 
-export default function App() {
-  const [apiStatus, setApiStatus] = useState({
-    loading: false,
-    connected: false,
-    message: '톰캣 API 상태 미확인 (테스트 버튼을 눌러주세요)',
-    timestamp: null,
-    details: null
-  });
+const MODULE_ITEMS = [
+  {
+    id: 'tomcat-was',
+    title: 'Tomcat Servlet Health Engine',
+    category: 'Backend',
+    progress: 100,
+    endpoint: '/api/status',
+    module: 'Servlet Core',
+    desc: 'Jakarta / Java EE 4.0 기반 Servlet 엔드포인트 및 Tomcat WAS 헬스체크 모듈'
+  },
+  {
+    id: 'maven-plugin',
+    title: 'Maven Pipeline Auto-Build',
+    category: 'DevOps',
+    progress: 100,
+    endpoint: 'mvn clean package',
+    module: 'Maven Plugin',
+    desc: 'frontend-maven-plugin과 maven-war-plugin을 통한 원스톱 WAR 패키징 자동화'
+  },
+  {
+    id: 'react-ui',
+    title: 'React 19 & Glassmorphism Design System',
+    category: 'Frontend',
+    progress: 100,
+    endpoint: '/src/App.jsx',
+    module: 'React Core',
+    desc: '선언적 컴포넌트 구조, 테마 Context 및 Glassmorphism 디자인 시스템'
+  },
+  {
+    id: 'tailwind-v4',
+    title: 'Tailwind CSS v4 Dynamic Engine',
+    category: 'Styling',
+    progress: 100,
+    endpoint: '/src/index.css',
+    module: 'Tailwind Engine',
+    desc: '@tailwindcss/vite 플러그인 및 6가지 브랜드 컬러 프리셋 테마'
+  },
+  {
+    id: 'admin-auth',
+    title: 'Admin User Security & JWT Auth',
+    category: 'Security',
+    progress: 80,
+    endpoint: '/api/auth/login',
+    module: 'Security Guard',
+    desc: '관리자 회원 인증, JWT 토큰 인가 및 Role 기반 접속 제어 패널'
+  },
+  {
+    id: 'crm-board',
+    title: 'CRM Multi-Board Management',
+    category: 'Business',
+    progress: 60,
+    endpoint: '/api/admin/board',
+    module: 'Content Manager',
+    desc: '게시판 목록, 리치 텍스트 에디터 글 작성 및 카테고리 관리 기능'
+  },
+  {
+    id: 'realtime-ws',
+    title: 'Real-Time WebSocket Analytics',
+    category: 'API',
+    progress: 40,
+    endpoint: 'ws://localhost:8080/ws',
+    module: 'Stream Connector',
+    desc: '어드민 접속자 수 및 실시간 서버 부하 모니터링 스트리밍'
+  },
+  {
+    id: 'db-jpa',
+    title: 'PostgreSQL / Spring Data JPA Layer',
+    category: 'Database',
+    progress: 20,
+    endpoint: 'jdbc:postgresql://localhost:5432/crm',
+    module: 'Persistence Layer',
+    desc: '관계형 데이터베이스 영속성 계층 연동 및 ORM 엔티티 설계'
+  },
+  {
+    id: 'ai-assistant',
+    title: 'AI Automated CRM Assistant',
+    category: 'AI Engine',
+    progress: 0,
+    endpoint: '/api/ai/recommend',
+    module: 'LLM Agent',
+    desc: '고객 데이터 분석 및 자동 답변 제안 AI 어시스턴트 모듈'
+  }
+];
 
-  const [activeTab, setActiveTab] = useState('overview');
+function MainContent() {
+  const {
+    viewLayout,
+    setViewLayout,
+    gridColumns,
+    setGridColumns,
+    colorPreset,
+    previewItem,
+    setPreviewItem
+  } = useThemeSystem();
 
-  const fetchApiStatus = async () => {
-    setApiStatus(prev => ({ ...prev, loading: true }));
-    try {
-      const response = await fetch('/api/status');
-      if (response.ok) {
-        const data = await response.json();
-        setApiStatus({
-          loading: false,
-          connected: true,
-          message: data.message || 'Tomcat Servlet과 정상적으로 연결되었습니다.',
-          timestamp: data.timestamp || new Date().toISOString(),
-          details: data
-        });
-      } else {
-        throw new Error(`HTTP Error ${response.status}`);
-      }
-    } catch (err) {
-      setApiStatus({
-        loading: false,
-        connected: false,
-        message: `API 연결 대기 중: Vite dev 모드에서는 Tomcat 서버(port 8080)가 실행 중이어야 합니다. (빌드 후 WAR 배포 시 자동 연결)`,
-        timestamp: new Date().toLocaleTimeString(),
-        details: { error: err.message }
-      });
-    }
-  };
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedProgress, setSelectedProgress] = useState('All');
 
-  useEffect(() => {
-    // Initial fetch attempt
-    fetchApiStatus();
-  }, []);
-
-  const techStack = [
-    {
-      name: 'Apache Tomcat',
-      role: 'Web Application Server (WAS)',
-      icon: Server,
-      color: 'from-amber-500 to-orange-600',
-      badgeBg: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-      desc: 'Jakarta Servlet기반 WAR 패키징을 수용하는 정통 WAS',
-      status: apiStatus.connected ? 'Active (API Linked)' : 'Ready for Deployment'
-    },
-    {
-      name: 'Apache Maven',
-      role: 'Build & Lifecycle Manager',
-      icon: Box,
-      color: 'from-rose-500 to-red-600',
-      badgeBg: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-      desc: 'frontend-maven-plugin을 통한 자동화 통합 빌드 파이프라인',
-      status: 'Configured (pom.xml)'
-    },
-    {
-      name: 'React 19',
-      role: 'Frontend UI Framework',
-      icon: Atom,
-      color: 'from-cyan-400 to-blue-600',
-      badgeBg: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-      desc: '선언적 컴포넌트 기반 인터페이스 및 최신 React 기능',
-      status: 'Running'
-    },
-    {
-      name: 'Vite 6',
-      role: 'Next-Gen Frontend Tooling',
-      icon: Zap,
-      color: 'from-violet-500 to-purple-600',
-      badgeBg: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-      desc: '초고속 HMR 및 최적화된 Rollup 번들링 빌드 엔진',
-      status: 'Active (Port 5173)'
-    },
-    {
-      name: 'Tailwind CSS v4',
-      role: 'Utility-First Styling Engine',
-      icon: Palette,
-      color: 'from-sky-400 to-teal-500',
-      badgeBg: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
-      desc: '@tailwindcss/vite 플러그인 기반 다이나믹 디자이너 체계',
-      status: 'Compiled'
-    }
+  const categories = ['All', 'Backend', 'Frontend', 'Styling', 'DevOps', 'Security', 'Business', 'API', 'Database', 'AI Engine'];
+  const progressFilters = [
+    { label: '전체', value: 'All' },
+    { label: '완료 (100%)', value: 100 },
+    { label: '검수 중 (80%)', value: 80 },
+    { label: '진행 중 (40-60%)', value: 'in_progress' },
+    { label: '시작 단계 (0-20%)', value: 'planning' },
   ];
 
+  const filteredItems = MODULE_ITEMS.filter(item => {
+    if (selectedCategory !== 'All' && item.category !== selectedCategory) return false;
+    if (selectedProgress === 100 && item.progress !== 100) return false;
+    if (selectedProgress === 80 && item.progress !== 80) return false;
+    if (selectedProgress === 'in_progress' && (item.progress < 40 || item.progress > 60)) return false;
+    if (selectedProgress === 'planning' && item.progress > 20) return false;
+    return true;
+  });
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden">
-      {/* Background Decorative Gradients */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
-      <div className="absolute top-1/3 -right-40 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-x-hidden font-sans">
+      
+      {/* Dynamic Background Glows */}
+      <div 
+        className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none opacity-20 transition-all duration-700"
+        style={{ backgroundColor: colorPreset.primary }}
+      />
+      <div className="absolute top-1/2 -right-40 w-96 h-96 bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Header */}
-      <header className="glass-panel sticky top-0 z-50 border-b border-slate-800/80 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/20">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <Layers className="w-5 h-5 text-indigo-400" />
-              </div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
-                T-M-R Architecture Dashboard
-              </h1>
-              <p className="text-xs text-slate-400">Tomcat + Maven + React + Vite + Tailwind CSS</p>
-            </div>
-          </div>
+      {/* Top Header Navigation */}
+      <HeaderBar />
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              Environment Ready
-            </div>
-            <button
-              onClick={fetchApiStatus}
-              disabled={apiStatus.loading}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-sm font-medium transition-all shadow-lg shadow-indigo-600/25 disabled:opacity-50 cursor-pointer"
-            >
-              <RefreshCw className={`w-4 h-4 ${apiStatus.loading ? 'animate-spin' : ''}`} />
-              <span>Tomcat API 연결 테스트</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex flex-col gap-8 z-10">
-        {/* Hero Integration Banner */}
-        <section className="glass-card rounded-2xl p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <Cpu className="w-64 h-64 text-indigo-400" />
-          </div>
-
-          <div className="max-w-2xl relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium mb-4">
-              Full-Stack Modern Boilerplate
-            </span>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight mb-3">
-              Tomcat, Maven & React Vite Stack
-            </h2>
-            <p className="text-slate-300 text-sm leading-relaxed mb-6">
-              Java 엔터프라이즈 표준 WAS(Tomcat)와 Maven의 자동화 라이프사이클에,
-              React 19와 Vite 6, Tailwind CSS v4의 고성능 프론트엔드 파이프라인이 완벽히 연동되었습니다.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <button 
-                onClick={() => setActiveTab('overview')} 
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'overview' ? 'bg-white text-slate-900 shadow-md' : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'}`}
-              >
-                기술 스택 개요
-              </button>
-              <button 
-                onClick={() => setActiveTab('workflow')} 
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'workflow' ? 'bg-white text-slate-900 shadow-md' : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'}`}
-              >
-                빌드 & 배포 워크플로우
-              </button>
-              <button 
-                onClick={() => setActiveTab('admin')} 
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${activeTab === 'admin' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 border border-indigo-500/30'}`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>어드민 통제 센터 (Admin)</span>
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {activeTab === 'admin' ? (
-          <AdminDashboard />
-        ) : (
-          <>
-            {/* Tomcat API Integration Card */}
-            <section className="glass-card rounded-2xl p-6 border-l-4 border-l-indigo-500">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-            <div className="flex items-center gap-3">
-              <div className={`p-2.5 rounded-xl ${apiStatus.connected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
-                <Activity className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-semibold text-white">Tomcat Backend Endpoint Status (`/api/status`)</h3>
-                <p className="text-xs text-slate-400">Vite Proxy ➔ Tomcat Servlet HTTP Response Check</p>
-              </div>
-            </div>
-
-            <div className="text-xs text-slate-400 font-mono">
-              Last Checked: {apiStatus.timestamp || 'N/A'}
-            </div>
-          </div>
-
-          <div className="bg-slate-900/90 rounded-xl p-4 border border-slate-800/80 font-mono text-xs text-slate-300 space-y-2">
-            <div className="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
-              <span>Status: <strong className={apiStatus.connected ? 'text-emerald-400' : 'text-amber-400'}>{apiStatus.connected ? '200 OK (CONNECTED)' : 'STANDBY / PENDING'}</strong></span>
-              <span>Proxy Target: http://localhost:8080</span>
-            </div>
-            <p className="text-slate-200 leading-relaxed pt-1">{apiStatus.message}</p>
-            {apiStatus.details && (
-              <pre className="text-slate-400 text-[11px] bg-slate-950 p-3 rounded-lg overflow-x-auto border border-slate-800 mt-2">
-                {JSON.stringify(apiStatus.details, null, 2)}
-              </pre>
-            )}
-          </div>
-        </section>
-
-        {/* Tech Stack Cards Grid */}
-        {activeTab === 'overview' && (
-          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {techStack.map((tech, idx) => {
-              const IconComponent = tech.icon;
-              return (
-                <div key={idx} className="glass-card rounded-xl p-5 flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tech.color} p-2.5 text-white shadow-md flex items-center justify-center`}>
-                        <IconComponent className="w-6 h-6" />
-                      </div>
-                      <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${tech.badgeBg}`}>
-                        {tech.status}
-                      </span>
-                    </div>
-
-                    <h4 className="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">
-                      {tech.name}
-                    </h4>
-                    <p className="text-xs font-semibold text-slate-400 mb-2">{tech.role}</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">
-                      {tech.desc}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-                    <span>Integration Verified</span>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  </div>
-                </div>
-              );
-            })}
-          </section>
-        )}
-
-        {/* Workflow Guide */}
-        {activeTab === 'workflow' && (
-          <section className="glass-card rounded-2xl p-6 space-y-6">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Terminal className="w-5 h-5 text-indigo-400" />
-              개발 및 빌드 라이프사이클 가이드
+      {/* Main Body Layout */}
+      <div className="flex-1 max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex flex-col md:flex-row gap-6 z-10">
+        
+        {/* Left Sidebar Filter Panel */}
+        <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-6">
+          
+          {/* View Mode & Grid Controls */}
+          <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+              <SlidersHorizontal className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
+              뷰 스타일 & 레이아웃
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Dev Mode */}
-              <div className="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-2 mb-3 text-indigo-400 font-semibold text-sm">
-                  <Zap className="w-4 h-4" />
-                  1. 프론트엔드 독립 개발 모드 (Vite HMR)
-                </div>
-                <p className="text-xs text-slate-300 mb-3">
-                  `frontend/` 디렉터리에서 Vite 서버를 독립 실행하여 초고속 HMR 및 실시간 UI 작업을 진행합니다.
-                </p>
-                <div className="bg-slate-950 p-3 rounded-lg font-mono text-xs text-emerald-400 border border-slate-800">
-                  cd frontend<br />
-                  npm run dev
-                </div>
-              </div>
-
-              {/* Build Mode */}
-              <div className="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-2 mb-3 text-amber-400 font-semibold text-sm">
-                  <Box className="w-4 h-4" />
-                  2. Maven 원스톱 통합 빌드 & Tomcat WAR 생성
-                </div>
-                <p className="text-xs text-slate-300 mb-3">
-                  루트에서 Maven 패키지 명령을 실행하면 Vite 빌드가 자동 수행되며 `target/*.war`로 패키징됩니다.
-                </p>
-                <div className="bg-slate-950 p-3 rounded-lg font-mono text-xs text-amber-400 border border-slate-800">
-                  mvn clean package
-                </div>
-              </div>
+            {/* Layout Mode Selector (Grid vs Table) */}
+            <div className="grid grid-cols-2 gap-2 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+              <button
+                onClick={() => setViewLayout('grid')}
+                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
+                  viewLayout === 'grid'
+                    ? 'bg-slate-800 text-white shadow-md border border-slate-700'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" style={{ color: viewLayout === 'grid' ? colorPreset.primary : 'currentColor' }} />
+                그리드 카너
+              </button>
+              <button
+                onClick={() => setViewLayout('table')}
+                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
+                  viewLayout === 'table'
+                    ? 'bg-slate-800 text-white shadow-md border border-slate-700'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Table className="w-3.5 h-3.5" style={{ color: viewLayout === 'table' ? colorPreset.primary : 'currentColor' }} />
+                DataGrid 표
+              </button>
             </div>
 
-            <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs text-slate-300">
-              <strong className="text-indigo-300 block mb-1">💡 Tomcat 배포 팁:</strong>
-              생성된 `target/T-M-R_01-1.0.0.war` 파일을 Tomcat 서버의 `webapps/` 폴더에 복사하거나, IDE(Eclipse, IntelliJ, VSCode Tomcat extension)에 프로젝트를 등록하여 즉시 서비스할 수 있습니다.
-            </div>
-          </section>
-        )}
-      </>
-    )}
-  </main>
+            {/* Column Selector for Grid Layout (1 ~ 5) */}
+            {viewLayout === 'grid' && (
+              <div className="pt-2 border-t border-slate-800">
+                <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+                  <span>그리드 열 수:</span>
+                  <span className="font-mono text-white font-bold">{gridColumns} 열</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((col) => (
+                    <button
+                      key={col}
+                      onClick={() => setGridColumns(col)}
+                      className={`flex-1 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                        gridColumns === col
+                          ? 'bg-slate-800 text-white font-bold border border-slate-700 shadow-xs'
+                          : 'bg-slate-900 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      {col}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
-      {/* Footer */}
-      <footer className="glass-panel border-t border-slate-800/80 py-4 px-6 mt-auto text-center text-xs text-slate-500">
-        <p>Tomcat + Maven + React + Vite + Tailwind CSS Full Architecture Setup</p>
-      </footer>
+          {/* Category Filters */}
+          <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+              <Filter className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
+              카테고리 필터
+            </h3>
+
+            <div className="space-y-1">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
+                    selectedCategory === cat
+                      ? 'bg-slate-800 text-white font-semibold shadow-xs border border-slate-700'
+                      : 'text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-slate-500 border border-slate-800">
+                    {cat === 'All' ? MODULE_ITEMS.length : MODULE_ITEMS.filter(i => i.category === cat).length}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Status Progress Filter */}
+          <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+              <Activity className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
+              진행 상태 필터
+            </h3>
+
+            <div className="space-y-1">
+              {progressFilters.map((pf) => (
+                <button
+                  key={pf.value}
+                  onClick={() => setSelectedProgress(pf.value)}
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all ${
+                    selectedProgress === pf.value
+                      ? 'bg-slate-800 text-white font-semibold border border-slate-700'
+                      : 'text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'
+                  }`}
+                >
+                  {pf.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Right Main Workspace */}
+        <main className="flex-1 space-y-6 min-w-0">
+          
+          {/* Top Status Header Banner */}
+          <div className="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  Active Workspace
+                </span>
+                <span className="text-xs text-slate-400 font-mono">
+                  {filteredItems.length} 개 모듈 항목 표시 중
+                </span>
+              </div>
+              <h2 className="text-2xl font-extrabold text-white tracking-tight font-outfit">
+                LEBASS CRM UI/UX Design System
+              </h2>
+              <p className="text-xs text-slate-300 mt-1">
+                글래스모피즘, 6가지 브랜드 프리셋, 디바이스 시뮬레이터 및 Cmd+K 전역 검색이 적용되었습니다.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <StatusBadge progress={100} />
+            </div>
+          </div>
+
+          {/* Mobile Swiper (Mobile breakpoint <= 900px) */}
+          <MobileSwiper items={filteredItems} />
+
+          {/* Desktop Content Views (Hidden on mobile swiper breakpoint or responsive) */}
+          <div className="hidden md:block">
+            {viewLayout === 'grid' ? (
+              <GlassCardGrid items={filteredItems} />
+            ) : (
+              <DataGridTable items={filteredItems} />
+            )}
+          </div>
+        </main>
+      </div>
+
+      {/* Global Search Modal */}
+      <SearchModal items={MODULE_ITEMS} />
+
+      {/* Device Preview Simulator Modal */}
+      {previewItem && (
+        <DevicePreviewSimulator
+          item={previewItem}
+          onClose={() => setPreviewItem(null)}
+        />
+      )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <MainContent />
+    </ThemeProvider>
   );
 }
