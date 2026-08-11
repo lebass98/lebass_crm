@@ -3,106 +3,59 @@
 @layer base {
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #EAE8E3;
+    color: #181818;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
   }
 }
 
-/* Glassmorphism utilities with Light & Dark support */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(145, 158, 171, 0.2);
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+/* Custom background for main area */
+.bg-trifecta-cream {
+  background-color: #EAE8E3;
 }
 
-.dark .glass-panel {
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.37);
+/* Custom Red Accent */
+.bg-trifecta-red {
+  background-color: #FF3B30;
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(145, 158, 171, 0.15);
-  box-shadow: 0 8px 24px 0 rgba(145, 158, 171, 0.08);
+.text-trifecta-red {
+  color: #FF3B30;
 }
 
-.dark .glass-card {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.4);
+/* Giant Headline styling */
+.font-giant {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
 }
 
-.glass-card:hover {
-  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.12);
+/* Barcode / Stripe Graphic */
+.barcode-graphic {
+  background: repeating-linear-gradient(
+    90deg,
+    #181818,
+    #181818 2px,
+    transparent 2px,
+    transparent 4px,
+    #181818 4px,
+    #181818 7px,
+    transparent 7px,
+    transparent 9px
+  );
 }
 
-.dark .glass-card:hover {
-  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.6);
-}
-
-/* Floating Pill Navbar */
-.floating-pill-nav {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(145, 158, 171, 0.2);
-}
-
-.dark .floating-pill-nav {
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* Trifecta Gradient Text */
-.gradient-text-trifecta {
-  background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #0f172a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.dark .gradient-text-trifecta {
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-text-accent {
-  background: linear-gradient(135deg, var(--primary-color, #00A76F) 0%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Glowing CTA Button */
-.btn-glow-cta {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.btn-glow-cta::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, var(--primary-color, #00A76F), #3b82f6);
-  opacity: 0.5;
-  filter: blur(8px);
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.btn-glow-cta:hover::before {
-  opacity: 0.9;
-  filter: blur(12px);
+.barcode-red-graphic {
+  background: repeating-linear-gradient(
+    90deg,
+    #FF3B30,
+    #FF3B30 2px,
+    transparent 2px,
+    transparent 4px
+  );
 }
 
 /* Custom scrollbar */
@@ -112,14 +65,4 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* Pulse animation */
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.05); }
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
