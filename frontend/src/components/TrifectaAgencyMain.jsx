@@ -257,26 +257,7 @@ export default function TrifectaAgencyMain() {
       {/* ---------------------------------------------------- */}
       {/* FLOATING BOTTOM RIGHT WIDGETS                        */}
       {/* ---------------------------------------------------- */}
-      <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2.5 z-40">
-        
-        {/* Template Purchase Card */}
-        <div className="bg-[#181818] text-white p-2.5 pr-4 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-800 hover:scale-105 transition-transform cursor-pointer">
-          <div className="w-10 h-10 rounded-lg bg-slate-800 overflow-hidden border border-slate-700 flex items-center justify-center text-xs font-mono font-bold text-slate-300">
-            (t)®
-          </div>
-          <div className="text-[11px]">
-            <div className="font-bold font-outfit text-white">(t)rifecta® Template</div>
-            <div className="text-slate-400 text-[10px]">from <strong className="text-white">$129</strong></div>
-          </div>
-        </div>
-
-        {/* Made in Framer Badge */}
-        <div className="bg-white/90 backdrop-blur-md text-slate-900 px-3 py-1.5 rounded-lg border border-slate-200/80 shadow-md text-xs font-bold font-sans flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 bg-black rotate-45" />
-          <span>Made in Framer</span>
-        </div>
-
-      </div>
+      
 
     </main>
   );

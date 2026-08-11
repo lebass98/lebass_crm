@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Grid } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 export default function TrifectaAgencySidebar() {
   const navItems = [
@@ -11,100 +11,125 @@ export default function TrifectaAgencySidebar() {
   ];
 
   return (
-    <aside className="w-full md:w-80 lg:w-88 shrink-0 bg-white border-r border-slate-200/80 hidden md:flex flex-col justify-between p-6 sticky top-0 h-screen z-30 overflow-y-auto">
+    <aside className="w-full md:w-96 lg:w-[410px] shrink-0 bg-white border-r border-slate-200 hidden md:flex sticky top-0 h-screen z-30 font-sans shadow-xs">
       
-      {/* Top Section: Jessica Call Card & Open Slots */}
-      <div className="space-y-6">
+      {/* ---------------------------------------------------- */}
+      {/* FAR-LEFT NARROW STRIP COLUMN (Profile, (t)rifecta®, :::) */}
+      {/* ---------------------------------------------------- */}
+      <div className="w-16 border-r border-slate-100 flex flex-col justify-between items-center py-4 shrink-0 bg-slate-50/40">
         
-        {/* Book a 30-Min Call Card */}
-        <a 
-          href="#contact" 
-          className="flex items-center justify-between p-3.5 bg-[#181818] text-white rounded-xl hover:bg-black transition-all group shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <img 
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" 
-              alt="Jessica" 
-              className="w-9 h-9 rounded-full object-cover border border-slate-700"
-            />
-            <div className="text-xs">
-              <div className="font-bold font-outfit text-white">Book a 30-Min Call</div>
-              <div className="text-[10px] text-slate-400 font-mono">with Jessica</div>
-            </div>
-          </div>
-          <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </a>
-
-        {/* 3 Open Slots Status Bar */}
-        <div className="flex items-center gap-2.5 pt-2">
-          <div className="w-6 h-4 barcode-red-graphic" />
-          <span className="text-xs font-mono font-semibold text-slate-700">
-            <strong className="text-slate-900">3 open slots for</strong> May 2026
-          </span>
+        {/* Top: Jessica Profile Picture */}
+        <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 shadow-xs">
+          <img 
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" 
+            alt="Jessica" 
+            className="w-full h-full object-cover"
+          />
         </div>
 
-        {/* Navigation Links List */}
-        <nav className="pt-6 space-y-3 font-outfit font-extrabold text-2xl sm:text-3xl text-slate-900">
-          {navItems.map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <a
-                href={item.href}
-                className="hover:text-trifecta-red transition-colors flex items-center gap-1.5"
-              >
-                {item.label}
-              </a>
-              {item.badge && (
-                <span className="text-xs font-mono font-bold text-trifecta-red">
-                  {item.badge}
-                </span>
-              )}
-            </div>
-          ))}
-        </nav>
+        {/* Center: Vertical Branding Text (t)rifecta® */}
+        <div className="rotate-[-90deg] font-outfit font-extrabold text-slate-900 tracking-wider text-sm whitespace-nowrap select-none">
+          (t)rifecta®
+        </div>
+
+        {/* Bottom: ::: 6-dot Grid Icon */}
+        <div className="grid grid-cols-2 gap-1 p-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+        </div>
+
       </div>
 
-      {/* Middle Vertical Text Branding */}
-      <div className="hidden lg:block absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 origin-left text-xs font-extrabold tracking-widest text-slate-900 uppercase font-outfit pointer-events-none">
-        (t)rifecta®
-      </div>
-
-      {/* Bottom Section: Contact & Social Footer */}
-      <div className="pt-12 space-y-6 border-t border-slate-100">
+      {/* ---------------------------------------------------- */}
+      {/* MAIN SIDEBAR CONTENT AREA (Call Bar, Slots, Nav, Contact) */}
+      {/* ---------------------------------------------------- */}
+      <div className="flex-1 flex flex-col justify-between p-6 overflow-y-auto no-scrollbar">
         
-        {/* Barcode Graphic */}
-        <div className="w-16 h-4 barcode-graphic opacity-70" />
-
-        {/* Phone & Email */}
-        <div className="space-y-1 font-outfit">
-          <div className="text-xs text-slate-500 font-mono">(312) 555-2468</div>
-          <a href="mailto:hello@trifecta.agency" className="text-lg font-extrabold text-slate-900 hover:text-trifecta-red transition-colors block">
-            hello@trifecta.agency
+        {/* Top Section */}
+        <div className="space-y-6">
+          
+          {/* Book a 30-Min Call Card (Dark Bar) */}
+          <a 
+            href="#contact" 
+            className="flex items-center justify-between p-3.5 bg-[#181818] text-white rounded-lg hover:bg-black transition-all group shadow-sm"
+          >
+            <div className="text-xs font-outfit">
+              <span className="font-bold text-white">Book a 30-Min Call</span>
+              <span className="text-slate-400 font-mono ml-2 text-[11px]">/ with Jessica</span>
+            </div>
+            <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
+
+          {/* 3 Open Slots Status Bar */}
+          <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100">
+            <div className="w-6 h-4 barcode-red-graphic shrink-0" />
+            <span className="text-xs font-mono text-slate-600">
+              <strong className="text-slate-900 font-bold">3 open slots for</strong> May 2026
+            </span>
+          </div>
+
+          {/* Main Navigation Links List */}
+          <nav className="pt-2 space-y-4 font-outfit font-extrabold text-2xl sm:text-3xl text-slate-950">
+            {navItems.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <a
+                  href={item.href}
+                  className="hover:text-trifecta-red transition-colors block"
+                >
+                  {item.label}
+                </a>
+                {item.badge && (
+                  <span className="text-xs font-mono font-bold text-trifecta-red -mt-3">
+                    {item.badge}
+                  </span>
+                )}
+              </div>
+            ))}
+          </nav>
+
         </div>
 
-        {/* Copyright */}
-        <p className="text-[10px] text-slate-400 font-sans leading-relaxed">
-          © 2026 trifecta agency.<br />All rights reserved.
-        </p>
+        {/* Bottom Contact & Footer Info Section */}
+        <div className="pt-10 space-y-5 border-t border-slate-100 mt-auto">
+          
+          {/* Barcode Graphic */}
+          <div className="w-20 h-4 barcode-graphic opacity-80" />
 
-        {/* Social Icons & 2026 Grid */}
-        <div className="flex items-end justify-between pt-2">
-          <div className="flex items-center gap-3 text-sm text-slate-700">
-            <a href="#" className="hover:text-black transition-colors font-bold font-mono">𝕏</a>
-            <a href="#" className="hover:text-black transition-colors">📷</a>
-            <a href="#" className="hover:text-black transition-colors">🌐</a>
+          {/* Phone & Email */}
+          <div className="space-y-1">
+            <div className="text-xs text-slate-500 font-mono">(312) 555-2468</div>
+            <a 
+              href="mailto:hello@trifecta.agency" 
+              className="text-2xl font-extrabold text-slate-950 hover:text-trifecta-red transition-colors block font-outfit tracking-tight"
+            >
+              hello@trifecta.agency
+            </a>
           </div>
 
-          <div className="flex flex-col items-end">
-            <span className="text-[10px] font-extrabold font-mono text-slate-900 leading-tight">
-              20<br />26
-            </span>
-            <div className="grid grid-cols-3 gap-0.5 mt-1">
-              {[...Array(6)].map((_, i) => (
-                <span key={i} className="w-1 h-1 rounded-full bg-slate-900" />
-              ))}
+          {/* Copyright */}
+          <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+            © 2026 trifecta agency.<br />All rights reserved.
+          </p>
+
+          {/* Social Icons & 20©26 Typography */}
+          <div className="flex items-end justify-between pt-2">
+            <div className="flex items-center gap-3 text-base text-slate-800">
+              <a href="#" className="hover:text-trifecta-red transition-colors font-bold font-mono">𝕏</a>
+              <a href="#" className="hover:text-trifecta-red transition-colors">📷</a>
+              <a href="#" className="hover:text-trifecta-red transition-colors">🌐</a>
+            </div>
+
+            {/* 20©26 Typography matching image */}
+            <div className="text-right font-outfit font-extrabold text-xs text-slate-900 leading-tight">
+              <div>20©</div>
+              <div>26</div>
             </div>
           </div>
+
         </div>
 
       </div>
