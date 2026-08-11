@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { ThemeProvider, useThemeSystem } from './context/ThemeContext';
-import HeaderBar from './components/HeaderBar';
+import TrifectaHeader from './components/TrifectaHeader';
+import TrifectaHero from './components/TrifectaHero';
+import BentoGridFeatures from './components/BentoGridFeatures';
+import MetricsSection from './components/MetricsSection';
+import TrifectaFooter from './components/TrifectaFooter';
 import GlassCardGrid from './components/GlassCardGrid';
 import DataGridTable from './components/DataGridTable';
 import MobileSwiper from './components/MobileSwiper';
@@ -12,7 +16,9 @@ import {
   Table, 
   Filter, 
   SlidersHorizontal, 
-  Activity
+  Activity,
+  Layers,
+  Sparkles
 } from 'lucide-react';
 
 const MODULE_ITEMS = [
@@ -110,6 +116,7 @@ function MainContent() {
     setPreviewItem
   } = useThemeSystem();
 
+  const [activeSection, setActiveSection] = useState('overview');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProgress, setSelectedProgress] = useState('All');
 
@@ -134,175 +141,182 @@ function MainContent() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col relative overflow-x-hidden font-sans transition-colors duration-300">
       
-      {/* Dynamic Background Glows */}
+      {/* Background Glow effects */}
       <div 
-        className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none opacity-20 transition-all duration-700"
+        className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[140px] pointer-events-none opacity-25 transition-all duration-700"
         style={{ backgroundColor: colorPreset.primary }}
       />
-      <div className="absolute top-1/2 -right-40 w-96 h-96 bg-purple-500/10 dark:bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/3 -right-40 w-96 h-96 bg-purple-500/10 dark:bg-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Top Header Navigation */}
-      <HeaderBar />
+      {/* Trifecta Floating Header */}
+      <TrifectaHeader activeSection={activeSection} setActiveSection={setActiveSection} />
 
-      {/* Main Body Layout */}
-      <div className="flex-1 max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex flex-col md:flex-row gap-6 z-10">
+      {/* Hero Section */}
+      <TrifectaHero onOpenDemo={() => setPreviewItem(MODULE_ITEMS[0])} />
+
+      {/* Bento Grid Features Section */}
+      <BentoGridFeatures onSelectModule={(mod) => {
+        const matched = MODULE_ITEMS.find(m => m.id.includes(mod) || m.category.toLowerCase().includes(mod));
+        if (matched) setPreviewItem(matched);
+      }} />
+
+      {/* Metrics Counter Section */}
+      <MetricsSection />
+
+      {/* Interactive Module Workspace Section */}
+      <section className="py-12 px-4 max-w-[1600px] w-full mx-auto" id="showcase">
         
-        {/* Left Sidebar Filter Panel */}
-        <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-6">
-          
-          {/* View Mode & Grid Controls */}
-          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
-            <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <SlidersHorizontal className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
-              뷰 스타일 & 레이아웃
-            </h3>
-
-            {/* Layout Mode Selector (Grid vs Table) */}
-            <div className="grid grid-cols-2 gap-2 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
-              <button
-                onClick={() => setViewLayout('grid')}
-                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
-                  viewLayout === 'grid'
-                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <LayoutGrid className="w-3.5 h-3.5" style={{ color: viewLayout === 'grid' ? colorPreset.primary : 'currentColor' }} />
-                그리드 카너
-              </button>
-              <button
-                onClick={() => setViewLayout('table')}
-                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
-                  viewLayout === 'table'
-                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <Table className="w-3.5 h-3.5" style={{ color: viewLayout === 'table' ? colorPreset.primary : 'currentColor' }} />
-                DataGrid 표
-              </button>
-            </div>
-
-            {/* Column Selector for Grid Layout (1 ~ 5) */}
-            {viewLayout === 'grid' && (
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
-                  <span>그리드 열 수:</span>
-                  <span className="font-mono text-slate-900 dark:text-white font-bold">{gridColumns} 열</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((col) => (
-                    <button
-                      key={col}
-                      onClick={() => setGridColumns(col)}
-                      className={`flex-1 py-1.5 rounded-lg text-xs font-mono transition-all ${
-                        gridColumns === col
-                          ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold border border-slate-200 dark:border-slate-700 shadow-xs'
-                          : 'bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                      }`}
-                    >
-                      {col}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+        {/* Workspace Title */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-1 block">
+              INTERACTIVE WORKSPACE
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-outfit">
+              프로젝트 데이터그리드 & 디바이스 시뮬레이터
+            </h2>
           </div>
 
-          {/* Category Filters */}
-          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
-            <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <Filter className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
-              카테고리 필터
-            </h3>
+          <div className="flex items-center gap-2">
+            <StatusBadge progress={100} />
+          </div>
+        </div>
 
-            <div className="space-y-1">
-              {categories.map((cat) => (
+        {/* Workspace Body (Sidebar & Content) */}
+        <div className="flex flex-col md:flex-row gap-6">
+          
+          {/* Left Filter Sidebar */}
+          <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-6">
+            
+            {/* View Mode Controls */}
+            <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
+              <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <SlidersHorizontal className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
+                뷰 스타일 & 레이아웃
+              </h3>
+
+              <div className="grid grid-cols-2 gap-2 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
-                    selectedCategory === cat
-                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold shadow-xs border border-slate-200 dark:border-slate-700'
-                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
+                  onClick={() => setViewLayout('grid')}
+                  className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
+                    viewLayout === 'grid'
+                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  <span>{cat}</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-500 border border-slate-200 dark:border-slate-800">
-                    {cat === 'All' ? MODULE_ITEMS.length : MODULE_ITEMS.filter(i => i.category === cat).length}
-                  </span>
+                  <LayoutGrid className="w-3.5 h-3.5" style={{ color: viewLayout === 'grid' ? colorPreset.primary : 'currentColor' }} />
+                  그리드
                 </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Status Progress Filter */}
-          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
-            <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <Activity className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
-              진행 상태 필터
-            </h3>
-
-            <div className="space-y-1">
-              {progressFilters.map((pf) => (
                 <button
-                  key={pf.value}
-                  onClick={() => setSelectedProgress(pf.value)}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all ${
-                    selectedProgress === pf.value
-                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold border border-slate-200 dark:border-slate-700 shadow-xs'
-                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
+                  onClick={() => setViewLayout('table')}
+                  className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
+                    viewLayout === 'table'
+                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  {pf.label}
+                  <Table className="w-3.5 h-3.5" style={{ color: viewLayout === 'table' ? colorPreset.primary : 'currentColor' }} />
+                  DataGrid 표
                 </button>
-              ))}
-            </div>
-          </div>
-        </aside>
-
-        {/* Right Main Workspace */}
-        <main className="flex-1 space-y-6 min-w-0">
-          
-          {/* Top Status Header Banner */}
-          <div className="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden shadow-sm">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Active Workspace
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                  {filteredItems.length} 개 모듈 항목 표시 중
-                </span>
               </div>
-              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight font-outfit">
-                LEBASS CRM UI/UX Design System
-              </h2>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                글래스모피즘, 6가지 브랜드 프리셋, 디바이스 시뮬레이터 및 Cmd+K 전역 검색이 적용되었습니다.
-              </p>
+
+              {viewLayout === 'grid' && (
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+                    <span>그리드 열 수:</span>
+                    <span className="font-mono text-slate-900 dark:text-white font-bold">{gridColumns} 열</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((col) => (
+                      <button
+                        key={col}
+                        onClick={() => setGridColumns(col)}
+                        className={`flex-1 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                          gridColumns === col
+                            ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold border border-slate-200 dark:border-slate-700 shadow-xs'
+                            : 'bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                        }`}
+                      >
+                        {col}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="flex items-center gap-3">
-              <StatusBadge progress={100} />
+            {/* Category Filters */}
+            <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
+              <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <Filter className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
+                카테고리 필터
+              </h3>
+
+              <div className="space-y-1">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
+                      selectedCategory === cat
+                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold shadow-xs border border-slate-200 dark:border-slate-700'
+                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-500 border border-slate-200 dark:border-slate-800">
+                      {cat === 'All' ? MODULE_ITEMS.length : MODULE_ITEMS.filter(i => i.category === cat).length}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Mobile Swiper (Mobile breakpoint <= 900px) */}
-          <MobileSwiper items={filteredItems} />
+            {/* Status Progress Filter */}
+            <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
+              <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <Activity className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
+                진행 상태 필터
+              </h3>
 
-          {/* Desktop Content Views (Hidden on mobile swiper breakpoint or responsive) */}
-          <div className="hidden md:block">
-            {viewLayout === 'grid' ? (
-              <GlassCardGrid items={filteredItems} />
-            ) : (
-              <DataGridTable items={filteredItems} />
-            )}
-          </div>
-        </main>
-      </div>
+              <div className="space-y-1">
+                {progressFilters.map((pf) => (
+                  <button
+                    key={pf.value}
+                    onClick={() => setSelectedProgress(pf.value)}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all ${
+                      selectedProgress === pf.value
+                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold border border-slate-200 dark:border-slate-700 shadow-xs'
+                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    {pf.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </aside>
 
-      {/* Global Search Modal */}
+          {/* Right Main Grid / Table Content */}
+          <main className="flex-1 space-y-6 min-w-0">
+            <MobileSwiper items={filteredItems} />
+
+            <div className="hidden md:block">
+              {viewLayout === 'grid' ? (
+                <GlassCardGrid items={filteredItems} />
+              ) : (
+                <DataGridTable items={filteredItems} />
+              )}
+            </div>
+          </main>
+
+        </div>
+      </section>
+
+      {/* Trifecta Footer */}
+      <TrifectaFooter />
+
+      {/* Global Search Modal (Cmd+K / Ctrl+K) */}
       <SearchModal items={MODULE_ITEMS} />
 
       {/* Device Preview Simulator Modal */}
