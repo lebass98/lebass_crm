@@ -11,7 +11,7 @@ export default function TrifectaAgencySidebar() {
   ];
 
   return (
-    <aside className="w-full md:w-80 lg:w-88 shrink-0 bg-white border-r border-slate-200/80 flex flex-col justify-between p-6 relative min-h-screen">
+    <aside className="w-full md:w-80 lg:w-88 shrink-0 bg-white border-r border-slate-200/80 hidden md:flex flex-col justify-between p-6 sticky top-0 h-screen z-30 overflow-y-auto">
       
       {/* Top Section: Jessica Call Card & Open Slots */}
       <div className="space-y-6">
