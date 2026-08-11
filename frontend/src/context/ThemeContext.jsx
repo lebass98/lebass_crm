@@ -18,7 +18,7 @@ export const DEVICE_PRESETS = [
 ];
 
 export function ThemeProvider({ children }) {
-  const [themeMode, setThemeMode] = useState('dark');
+  const [themeMode, setThemeMode] = useState('light');
   const [colorPreset, setColorPreset] = useState(COLOR_PRESETS[0]);
   const [deviceMode, setDeviceMode] = useState('pc');
   const [previewScale, setPreviewScale] = useState(100);

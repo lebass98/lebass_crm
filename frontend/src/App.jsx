@@ -11,14 +11,8 @@ import {
   LayoutGrid, 
   Table, 
   Filter, 
-  Layers, 
   SlidersHorizontal, 
-  RefreshCw, 
-  Server, 
-  CheckCircle2, 
-  Sparkles,
-  Activity,
-  PlusCircle
+  Activity
 } from 'lucide-react';
 
 const MODULE_ITEMS = [
@@ -138,14 +132,14 @@ function MainContent() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col relative overflow-x-hidden font-sans transition-colors duration-300">
       
       {/* Dynamic Background Glows */}
       <div 
         className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none opacity-20 transition-all duration-700"
         style={{ backgroundColor: colorPreset.primary }}
       />
-      <div className="absolute top-1/2 -right-40 w-96 h-96 bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 -right-40 w-96 h-96 bg-purple-500/10 dark:bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Top Header Navigation */}
       <HeaderBar />
@@ -157,20 +151,20 @@ function MainContent() {
         <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-6">
           
           {/* View Mode & Grid Controls */}
-          <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-4 shadow-sm">
+            <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
               뷰 스타일 & 레이아웃
             </h3>
 
             {/* Layout Mode Selector (Grid vs Table) */}
-            <div className="grid grid-cols-2 gap-2 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+            <div className="grid grid-cols-2 gap-2 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
               <button
                 onClick={() => setViewLayout('grid')}
                 className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
                   viewLayout === 'grid'
-                    ? 'bg-slate-800 text-white shadow-md border border-slate-700'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" style={{ color: viewLayout === 'grid' ? colorPreset.primary : 'currentColor' }} />
@@ -180,8 +174,8 @@ function MainContent() {
                 onClick={() => setViewLayout('table')}
                 className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all ${
                   viewLayout === 'table'
-                    ? 'bg-slate-800 text-white shadow-md border border-slate-700'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200 dark:border-slate-700'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 <Table className="w-3.5 h-3.5" style={{ color: viewLayout === 'table' ? colorPreset.primary : 'currentColor' }} />
@@ -191,10 +185,10 @@ function MainContent() {
 
             {/* Column Selector for Grid Layout (1 ~ 5) */}
             {viewLayout === 'grid' && (
-              <div className="pt-2 border-t border-slate-800">
-                <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
                   <span>그리드 열 수:</span>
-                  <span className="font-mono text-white font-bold">{gridColumns} 열</span>
+                  <span className="font-mono text-slate-900 dark:text-white font-bold">{gridColumns} 열</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((col) => (
@@ -203,8 +197,8 @@ function MainContent() {
                       onClick={() => setGridColumns(col)}
                       className={`flex-1 py-1.5 rounded-lg text-xs font-mono transition-all ${
                         gridColumns === col
-                          ? 'bg-slate-800 text-white font-bold border border-slate-700 shadow-xs'
-                          : 'bg-slate-900 text-slate-400 hover:text-slate-200'
+                          ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold border border-slate-200 dark:border-slate-700 shadow-xs'
+                          : 'bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                       }`}
                     >
                       {col}
@@ -216,8 +210,8 @@ function MainContent() {
           </div>
 
           {/* Category Filters */}
-          <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
+            <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
               <Filter className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
               카테고리 필터
             </h3>
@@ -229,12 +223,12 @@ function MainContent() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
                     selectedCategory === cat
-                      ? 'bg-slate-800 text-white font-semibold shadow-xs border border-slate-700'
-                      : 'text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'
+                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold shadow-xs border border-slate-200 dark:border-slate-700'
+                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   <span>{cat}</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-slate-500 border border-slate-800">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-500 border border-slate-200 dark:border-slate-800">
                     {cat === 'All' ? MODULE_ITEMS.length : MODULE_ITEMS.filter(i => i.category === cat).length}
                   </span>
                 </button>
@@ -243,8 +237,8 @@ function MainContent() {
           </div>
 
           {/* Status Progress Filter */}
-          <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+          <div className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
+            <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
               <Activity className="w-3.5 h-3.5" style={{ color: colorPreset.primary }} />
               진행 상태 필터
             </h3>
@@ -256,8 +250,8 @@ function MainContent() {
                   onClick={() => setSelectedProgress(pf.value)}
                   className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all ${
                     selectedProgress === pf.value
-                      ? 'bg-slate-800 text-white font-semibold border border-slate-700'
-                      : 'text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'
+                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold border border-slate-200 dark:border-slate-700 shadow-xs'
+                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   {pf.label}
@@ -271,20 +265,20 @@ function MainContent() {
         <main className="flex-1 space-y-6 min-w-0">
           
           {/* Top Status Header Banner */}
-          <div className="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden">
+          <div className="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden shadow-sm">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                   Active Workspace
                 </span>
-                <span className="text-xs text-slate-400 font-mono">
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                   {filteredItems.length} 개 모듈 항목 표시 중
                 </span>
               </div>
-              <h2 className="text-2xl font-extrabold text-white tracking-tight font-outfit">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight font-outfit">
                 LEBASS CRM UI/UX Design System
               </h2>
-              <p className="text-xs text-slate-300 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
                 글래스모피즘, 6가지 브랜드 프리셋, 디바이스 시뮬레이터 및 Cmd+K 전역 검색이 적용되었습니다.
               </p>
             </div>
